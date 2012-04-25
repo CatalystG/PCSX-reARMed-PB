@@ -1,0 +1,19 @@
+USE_SCREEN=1
+USE_ALSA=1
+USE_OSS=0
+PLATFORM=generic
+NO_TSLIB=1
+RAM_FIXED=0
+
+TARGET = pcsx_rearmed
+ARCH = arm
+HAVE_NEON = 1
+HAVE_ARMV7 = 1
+
+export MAEMO=1
+LDFLAGS += -lscreen -lbps -lsocket -Lassets -ltco
+EXTRA_CFLAGS += -march=armv7-a -O3 -mfpu=neon -funsafe-math-optimizations \
+	-mstructure-size-boundary=32 -falign-functions=32 -falign-loops \
+    -DMAEMO -DMAEMO_CHANGES -DBASE_ADDR_FIXED=0
+	
+include Makefile

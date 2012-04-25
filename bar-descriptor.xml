@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<qnx>
+   <configuration id="com.qnx.qcc.toolChain.1487572186" name="Default">
+      <platformArchitecture>armle-v7</platformArchitecture>
+      <asset path="pcsx_rearmed" entry="true" type="Qnx/Elf">pcsx-rearmed</asset>
+   </configuration>
+   <configuration id="com.qnx.qcc.toolChain.1646202894" name="Device-Debug">
+      <platformArchitecture>armle-v7</platformArchitecture>
+      <asset path="pcsx_rearmed" entry="true" type="Qnx/Elf">pcsx_rearmed</asset>
+   </configuration>
+   <configuration id="com.qnx.qcc.toolChain.1301346082" name="Device-Release">
+      <platformArchitecture>armle-v7</platformArchitecture>
+      <asset path="pcsx_rearmed" entry="true" type="Qnx/Elf">pcsx_rearmed</asset>
+   </configuration>
+   <configuration id="com.qnx.qcc.toolChain.1387283059" name="Simulator-Debug">
+      <platformArchitecture>x86</platformArchitecture>
+      <asset path="x86/o-g/pcsx_rearmed" entry="true" type="Qnx/Elf">pcsx_rearmed</asset>
+   </configuration>
+   <initialWindow>      <aspectRatio>landscape</aspectRatio>
+      <autoOrients>false</autoOrients>
+</initialWindow>
+   <id>com.emulator.pcsx_pb</id>
+   <versionNumber>1.0.1</versionNumber>
+   <author>Catalyst G</author>
+   <authorId>gYAAgHmLj36GgRhxyfpb8MwaR-s</authorId>
+   <splashscreen>splash.png</splashscreen>
+   <icon>
+      <image>icon.png</image>
+   </icon>
+   <name>PCSX-PB</name>
+   <category>core.games</category>
+   <asset path="assets/controls.xml">controls.xml</asset>
+   <asset path="assets/square.png">square.png</asset>
+   <asset path="assets/circle.png">circle.png</asset>
+   <asset path="assets/cross.png">cross.png</asset>
+   <asset path="assets/dpad.png">dpad.png</asset>
+   <asset path="assets/loadstate.png">loadstate.png</asset>
+   <asset path="assets/rl.png">rl.png</asset>
+   <asset path="assets/savestate.png">savestate.png</asset>
+   <asset path="assets/select.png">select.png</asset>
+   <asset path="assets/start.png">start.png</asset>
+   <asset path="assets/triangle.png">triangle.png</asset>
+   <asset path="assets/icon.png">icon.png</asset>
+   <asset path="assets/splash.png">splash.png</asset>
+   <asset path="assets/libtco.so" type="Qnx/Elf">lib/libtco.so</asset>
+   <action>play_audio</action>
+   <action>access_shared</action>
+   <action>set_audio_volume</action>
+   <env var="LD_LIBRARY_PATH" value="app/native/lib"/>
+</qnx>
