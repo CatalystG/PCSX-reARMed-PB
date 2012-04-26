@@ -264,7 +264,7 @@ void do_emu_action(void)
 	default:
 		return;
 	}
-	hud_new_msg = 30;
+	hud_new_msg = 3;
 	return;
 
 do_state_slot:
@@ -279,6 +279,11 @@ int main(int argc, char *argv[])
 	// what is the name of the config file?
 	// it may be redefined by -cfg on the command line
 	strcpy(cfgfile_basename, "pcsx.cfg");
+
+#ifdef __QNX__
+	freopen("shared/misc/pcsx-rearmed-pb/log", "w", stdout);
+	freopen("shared/misc/pcsx-rearmed-pb/log", "w", stderr);
+#endif
 
 	emuLog = stdout;
 	SetIsoFile(NULL);

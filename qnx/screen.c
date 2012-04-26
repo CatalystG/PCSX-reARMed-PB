@@ -186,6 +186,8 @@ int handleDPadFunc(int angle, int event){
 static void
 handle_navigator_event(bps_event_t *event) {
 	navigator_window_state_t state;
+	bps_event_t *event_pause = NULL;
+	int rc;
 
     switch (bps_event_get_code(event)) {
     case NAVIGATOR_SWIPE_DOWN:
@@ -207,7 +209,17 @@ handle_navigator_event(bps_event_t *event) {
 
     	switch(state){
     	case NAVIGATOR_WINDOW_THUMBNAIL:
-    		in_keystate |= 1 << DKEY_START;
+    		for(;;){
+    			rc = bps_get_event(&event_pause, -1);
+    			assert(rc==BPS_SUCCESS);
+
+    			if(bps_event_get_code(event_pause) == NAVIGATOR_WINDOW_STATE){
+    				state = navigator_event_get_window_state(event_pause);
+    				if(state == NAVIGATOR_WINDOW_FULLSCREEN){
+    					break;
+    				}
+    			}
+    		}
     		break;
     	case NAVIGATOR_WINDOW_FULLSCREEN:
 			in_keystate &= ~(1<<DKEY_START);

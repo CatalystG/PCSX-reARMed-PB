@@ -74,6 +74,9 @@ int psxMemInit() {
 	if (psxM == MAP_FAILED)
 		psxM = mmap((void *)0x70000000, 0x00210000,
 			PROT_WRITE | PROT_READ, MAP_PRIVATE | MAP_ANONYMOUS | MAP_FIXED, -1, 0);
+	if (psxM == MAP_FAILED)
+			psxM = mmap((void *)0x70000000, 0x00210000,
+				PROT_WRITE | PROT_READ, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
 #endif
 	if (psxM == MAP_FAILED) {
 		SysMessage(_("mapping main RAM failed"));

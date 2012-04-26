@@ -46,11 +46,9 @@ int compare( const void* op1, const void* op2 )
 
 int dialog_select_game(char * isofilename){
 	char path[MAXPATHLEN];
-	char cwd[MAXPATHLEN];
 	int i, rc;
 
-	getcwd(cwd,MAXPATHLEN);
-	rc = snprintf(path, MAXPATHLEN, "%s/" ISO_DIR, cwd);
+	rc = snprintf(path, MAXPATHLEN, "%s", ISO_DIR);
 	if ((rc == -1) || (rc >= MAXPATHLEN)) {
 		return -1;
 	}
@@ -70,7 +68,7 @@ int dialog_select_game(char * isofilename){
 		for(;;) {
 			direntp = readdir( dirp );
 			if( direntp == NULL ) break;
-			//printf( "%s\n", direntp->d_name );
+			printf( "%s\n", direntp->d_name );
 			count++;
 		}
 		fflush(stdout);
@@ -93,6 +91,7 @@ int dialog_select_game(char * isofilename){
 		int len;
 		int j = 0, m;
 		int disabled[count];
+
 		//If a cue exists, disable the bin for easier readability
 		for(i=0; i<count;i++){
 
@@ -102,7 +101,7 @@ int dialog_select_game(char * isofilename){
 			}
 
 			//Check if current index is a cue
-			if( strncmp(list[i]+strlen(list[i])-4, ".cue", 4) == 0 ){
+			if( strncasecmp(list[i]+strlen(list[i])-4, ".cue", 4) == 0 ){
 				//Check the list for the matching bin
 				for(m=0;m<count;m++){
 					if( i == m ){
@@ -110,12 +109,13 @@ int dialog_select_game(char * isofilename){
 					}
 
 					len = max(strlen(list[i]),strlen(list[m]))-4;
-					if( (strncmp(list[i], list[m], len) == 0) && (strncmp(list[m]+strlen(list[m])-4, ".bin", 4) == 0) ){
+					if( (strncmp(list[i], list[m], len) == 0) && (strncasecmp(list[m]+strlen(list[m])-4, ".bin", 4) == 0) ){
 						//if we find a matching file, and it's a bin
 						disabled[j++] = m;
 						break;
 					}
 				}
+
 				//if there is no matching bin, hide the cue too
 				if(m==count){
 					disabled[j++] = i;
@@ -149,7 +149,10 @@ int dialog_select_game(char * isofilename){
 		int indice = 1;
 		dialog_set_popuplist_items(dialog, compact, k);
 		dialog_set_popuplist_separator_indices(dialog, &indice, 1);
-		if(strcmp(Config.Bios,"SCPH1001.BIN") != 0){
+		char test[MAXPATHLEN];
+		strcpy(test, "shared/misc/pcsx-rearmed-pb/bios/");
+		strcat(test, Config.Bios);
+		if(access(test,F_OK) != 0){
 			indice = 0;
 			dialog_set_popuplist_disabled_indices(dialog, &indice, 1);
 		}
@@ -174,7 +177,7 @@ int dialog_select_game(char * isofilename){
 					if(strcmp(label, DIALOG_OK_LABEL) == 0){
 						dialog_event_get_popuplist_selected_indices(event, (int**)response, &num);
 						if(num != 0){
-							printf("%s", compact[*response[0]]);fflush(stdout);
+							printf("%s\n", compact[*response[0]]);fflush(stdout);
 							strcpy(isofilename, compact[*response[0]]);
 						}
 						bps_free(response[0]);
@@ -198,14 +201,11 @@ int dialog_select_game(char * isofilename){
 		return 1;
 	}
 
-	if (isofilename[0] != '/') {
-		if (strlen(path) + strlen(isofilename) + 1 < MAXPATHLEN) {
-			strcat(path, "/");
-			strcat(path, isofilename);
-			strcpy(isofilename, path);
-		} else
-			isofilename[0] = 0;
-	}
+	if (strlen(path) + strlen(isofilename) + 1 < MAXPATHLEN) {
+		strcat(path, isofilename);
+		strcpy(isofilename, path);
+	} else
+		isofilename[0] = 0;
 	return 0;
 }
 
@@ -341,23 +341,14 @@ void handle_cfg(){
 		Config.Cdda = 1;
 	}
 	fclose(fd);
-
 }
 
 int external_main(int argc, char **argv)
 {
-	//char file[MAXPATHLEN] = "";
-	char path[MAXPATHLEN];
-	char cwd[MAXPATHLEN];
 	const char *cdfile = NULL;
 	int loadst = 0;
 	int rc;
-
-	getcwd(cwd,MAXPATHLEN);
-	rc = snprintf(path, MAXPATHLEN, "%s/" ISO_DIR, cwd);
-	if ((rc == -1) || (rc >= MAXPATHLEN)) {
-		return EXIT_FAILURE;
-	}
+	char isofilename[MAXPATHLEN];
 
 	strcpy(Config.BiosDir, BIOS_DIR);
 	strcpy(Config.PluginsDir, PLUGINS_DIR);
@@ -366,8 +357,6 @@ int external_main(int argc, char **argv)
 
 	//check if cfg exists
 	handle_cfg();
-
-	char isofilename[MAXPATHLEN];
 
 	//Pick the ISO to load using QNX BPS dialogs
 	bps_initialize();
@@ -430,8 +419,6 @@ int external_main(int argc, char **argv)
 		int ret = emu_load_state(loadst - 1);
 		printf("%s state %d\n", ret ? "failed to load" : "loaded", loadst);
 	}
-
-	//qnx_init(&argc, &argv);
 
 	if (GPU_open != NULL) {
 		int ret = GPU_open(&gpuDisp, "PCSX", NULL);

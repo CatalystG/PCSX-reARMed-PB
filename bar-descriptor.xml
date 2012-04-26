@@ -16,11 +16,13 @@
       <platformArchitecture>x86</platformArchitecture>
       <asset path="x86/o-g/pcsx_rearmed" entry="true" type="Qnx/Elf">pcsx_rearmed</asset>
    </configuration>
-   <initialWindow>      <aspectRatio>landscape</aspectRatio>
-      <autoOrients>false</autoOrients>
+   <initialWindow>         
 </initialWindow>
+      <aspectRatio>landscape</aspectRatio>
+      <autoOrients>false</autoOrients>
    <id>com.emulator.pcsx_pb</id>
    <versionNumber>1.0.1</versionNumber>
+   <buildId>4</buildId>
    <author>Catalyst G</author>
    <authorId>gYAAgHmLj36GgRhxyfpb8MwaR-s</authorId>
    <splashscreen>splash.png</splashscreen>
