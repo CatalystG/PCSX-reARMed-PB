@@ -290,7 +290,11 @@ qnx_init(int * argc, char ***argv)
     rc = tco_initialize(&tco_ctx, screen_ctx, cb);
     if(rc != TCO_SUCCESS)
     	printf("TCO: Init error\n");
-    rc = tco_loadcontrols(tco_ctx, "app/native/controls.xml");
+    if(access("shared/misc/pcsx-rearmed-pb/cfg/controls.xml", F_OK) == 0){
+    	rc = tco_loadcontrols(tco_ctx, "shared/misc/pcsx-rearmed-pb/cfg/controls.xml");
+    } else {
+    	rc = tco_loadcontrols(tco_ctx, "app/native/controls.xml");
+    }
     if (rc != TCO_SUCCESS)
     	printf("TCO: Load Controls Error\n");fflush(stdout);
     tco_showlabels(tco_ctx, screen_win);
